@@ -1,0 +1,95 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+# Purpose
+
+The aim of this folder is show my attempt to replicate two figures illustrating how different management fee structures effectively eat into investors overall cumulative returns. 
+
+I was, unfortunately, unable to replicate the figures and calculate the impact on returns of different management fees. This tutorial however served as practice in using a project environment with the fmxdat package, using ggplot auxiliary functions, 
+
+
+```{r}
+
+rm(list = ls()) # Clean your environment:
+gc() # garbage collection - It can be useful to call gc after a large object has been removed, as this may prompt R to return memory to the operating system.
+library(pacman)
+p_load(tidyverse, rmsfuns, tbl2xts, PerformanceAnalytics, xts, glue, lubridate)
+
+```
+
+
+# Data loading
+
+Loading in Jalshtr dataset from the fmxdat library.
+
+```{r}
+
+dta <- fmxdat::Jalshtr
+
+# Checking missing values
+
+sum(is.na(dta$TRI)) #=0... no missing TRI values
+sum(is.na(dta$date)) #=0... no missing dates
+
+```
+
+
+# Cumulative Returns Since Inception
+```{r, warning=FALSE}
+# Calculating Simple Returns
+
+dta2 <- dta %>% arrange(date) %>%
+    mutate(across(.cols = TRI, .fns = ~./lag(.) - 1, .names = "Simple_Returns"))%>%
+# Specifying that the first date should be excluded (avoid NA's)
+    filter(date>first(date))%>%
+# Calculating cumulative returns
+    mutate(Cum_Ret = cumprod(1 + Simple_Returns))
+    
+# Plotting using fmxdat auxiliary functions
+p<-
+    ggplot(dta2) + 
+geom_line(aes(date, Cum_Ret), color = "steelblue") + 
+fmxdat::theme_fmx(title.size = ggpts(30), 
+                    subtitle.size = ggpts(28),
+                    caption.size = ggpts(25),
+                    CustomCaption = T) + 
+    fmxdat::fmx_cols() + 
+  
+  labs(x = "", y = "Cumulative Returns", caption = "Note:\nOwn Calculations",
+       title = "Cumulative Returns Since Inception",
+       subtitle = "Base Return: FTSE JSE ALSI \nStart: June 2002") + 
+  
+  guides(color = F)
+  
+  fmxdat::finplot(p, x.vert = T, x.date.type = "%Y", x.date.dist = "1 year")
+```
+
+
+# Cumulative Returns since 2010
+```{r, warning=FALSE}
+dta3 <- dta2%>%filter(date>lubridate::ymd(20100101))
+p<-
+    ggplot(dta3) + 
+geom_line(aes(date, Cum_Ret), color = "steelblue") + 
+fmxdat::theme_fmx(title.size = ggpts(30), 
+                    subtitle.size = ggpts(28),
+                    caption.size = ggpts(25),
+                    CustomCaption = T) + 
+    fmxdat::fmx_cols() + 
+  
+  labs(x = "", y = "Cumulative Returns", caption = "Note:\nOwn Calculations",
+       title = "Cumulative Returns Since 2010",
+       subtitle = "Base Return: FTSE JSE ALSI \nStart: January 2010") + 
+  
+  guides(color = F)
+  
+  fmxdat::finplot(p, x.vert = T, x.date.type = "%Y", x.date.dist = "1 year")
+
+```
+
+# Lastly
+
+The point of this exercise was to investigate the "Tyranny of Fees"; how greater management fees impact investors cumulative returns. I have noted that a seperate column must be added for the "type" of management fee (ie the different scales) in order to change the color specification in the ggplot aesthetics. I look forward to learning how to be able to plot the figures, and continuing practicing using these tools in future tutorials. 
