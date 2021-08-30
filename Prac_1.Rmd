@@ -40,45 +40,62 @@ dta2 <- dta %>% arrange(date) %>%
     filter(date>first(date))%>%
 # Calculating cumulative returns
     mutate(Cum_Ret = cumprod(1 + Simple_Returns))
-    
-# Plotting using fmxdat auxiliary functions
-p<-
-    ggplot(dta2) + 
-geom_line(aes(date, Cum_Ret), color = "steelblue") + 
+
+# calculating cumulative returns for different bps levels
+# (100 bps approximately 1%)
+
+dta22 <- dta2 %>%
+  arrange(date) %>%
+  mutate(bps_10=(Cum_Ret*0.999))%>%
+  mutate(bps_50=(Cum_Ret*0.995))%>%
+  mutate(bps_100=(Cum_Ret*0.99))%>%
+  mutate(bps_200=(Cum_Ret*0.98))%>%
+  mutate(bps_250=(Cum_Ret*0.975))%>%
+  mutate(bps_350=(Cum_Ret*0.965))
+
+# In order to create legend (ie by type), need to collect the bps columns into a single one (pivot longer)
+
+dta221 <- dta22 %>%
+  arrange(date)%>%
+  pivot_longer(cols=starts_with("bps"), 
+               names_to="Type",
+               values_to="Tyranny" )
+  
+p1<-
+    ggplot(dta221) + 
+geom_line(aes(date, Tyranny, colour=Type)) + 
 fmxdat::theme_fmx(title.size = ggpts(30), 
                     subtitle.size = ggpts(28),
                     caption.size = ggpts(25),
-                    CustomCaption = T) + 
+                    CustomCaption = T,
+                  legend.size = 10,
+                  legend.pos = "right") + 
     fmxdat::fmx_cols() + 
   
   labs(x = "", y = "Cumulative Returns", caption = "Note:\nOwn Calculations",
        title = "Cumulative Returns Since Inception",
-       subtitle = "Base Return: FTSE JSE ALSI \nStart: June 2002") + 
-  
-  guides(color = F)
-  
-  fmxdat::finplot(p, x.vert = T, x.date.type = "%Y", x.date.dist = "1 year")
+       subtitle = "Base Return: FTSE JSE ALSI \nStart: June 2002")
+
 ```
 
 
 # Cumulative Returns since 2010
 ```{r, warning=FALSE}
-dta3 <- dta2%>%filter(date>lubridate::ymd(20100101))
+dta3 <- dta221%>%filter(date>lubridate::ymd(20100101))
+
 p<-
     ggplot(dta3) + 
-geom_line(aes(date, Cum_Ret), color = "steelblue") + 
+geom_line(aes(date, Tyranny, colour=Type)) + 
 fmxdat::theme_fmx(title.size = ggpts(30), 
                     subtitle.size = ggpts(28),
                     caption.size = ggpts(25),
-                    CustomCaption = T) + 
+                    CustomCaption = T,
+                  legend.size = 10,
+                  legend.pos = "right") + 
     fmxdat::fmx_cols() + 
   
   labs(x = "", y = "Cumulative Returns", caption = "Note:\nOwn Calculations",
        title = "Cumulative Returns Since 2010",
-       subtitle = "Base Return: FTSE JSE ALSI \nStart: January 2010") + 
-  
-  guides(color = F)
-  
-  fmxdat::finplot(p, x.vert = T, x.date.type = "%Y", x.date.dist = "1 year")
+       subtitle = "Base Return: FTSE JSE ALSI \nStart: January 2010")
 
 ```
