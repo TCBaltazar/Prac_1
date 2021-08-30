@@ -19,25 +19,6 @@ The aim of this folder is show my attempt to replicate two figures illustrating 
 My attempt at this practical exercise, including all code and output used, can be found in the file 'Prac_1.md'.
 
 
-
-
-# Data loading
-
-Loading in Jalshtr dataset from the fmxdat library.
-
-```{r}
-
-dta <- fmxdat::Jalshtr
-```
-Checking missing values
-
-```{r}
-sum(is.na(dta$TRI)) #=0... no missing TRI values
-sum(is.na(dta$date)) #=0... no missing dates
-
-```
-
-
 # Cumulative Returns Since Inception
 ```{r, warning=FALSE, include=FALSE}
 
