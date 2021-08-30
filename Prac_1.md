@@ -7,8 +7,8 @@ gc() # garbage collection - It can be useful to call gc after a large object has
 ```
 
     ##          used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
-    ## Ncells 405311 21.7     829452 44.3         NA   657877 35.2
-    ## Vcells 764065  5.9    8388608 64.0      16384  1802283 13.8
+    ## Ncells 405312 21.7     829452 44.3         NA   657877 35.2
+    ## Vcells 764093  5.9    8388608 64.0      16384  1802283 13.8
 
 ``` r
 library(pacman)
@@ -165,7 +165,8 @@ fmxdat::theme_fmx(title.size = ggpts(30),
 p1
 ```
 
-![](Prac_1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- --> Even after
-changing the way the cumulative returns are calculated (see README in
-root folder), the figure above still does not have the same features as
-the one we were tasked with replicating.
+![](Prac_1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Even after changing the way the cumulative returns are calculated (see
+README in root folder), the figure above still does not have the same
+features as the one we were tasked with replicating.
