@@ -1,37 +1,45 @@
----
-title: "Output: Practical 1"
-output: github_document
----
+Output: Practical 1
+================
 
-```{r}
-
+``` r
 rm(list = ls()) # Clean your environment:
 gc() # garbage collection - It can be useful to call gc after a large object has been removed, as this may prompt R to return memory to the operating system.
-library(pacman)
-p_load(fmxdat,tidyverse, rmsfuns, tbl2xts, PerformanceAnalytics, xts, glue, lubridate)
-
 ```
 
+    ##          used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
+    ## Ncells 405311 21.7     829452 44.3         NA   657877 35.2
+    ## Vcells 764065  5.9    8388608 64.0      16384  1802283 13.8
+
+``` r
+library(pacman)
+p_load(fmxdat,tidyverse, rmsfuns, tbl2xts, PerformanceAnalytics, xts, glue, lubridate)
+```
 
 # Data loading
 
 Loading in Jalshtr dataset from the fmxdat library.
 
-```{r}
-
+``` r
 dta <- fmxdat::Jalshtr
 ```
+
 Checking missing values
 
-```{r}
+``` r
 sum(is.na(dta$TRI)) #=0... no missing TRI values
-sum(is.na(dta$date)) #=0... no missing dates
-
 ```
 
+    ## [1] 0
+
+``` r
+sum(is.na(dta$date)) #=0... no missing dates
+```
+
+    ## [1] 0
 
 # Cumulative Returns Since Inception
-```{r, warning=FALSE}
+
+``` r
 # Calculating Simple Returns
 
 dta2 <- dta %>% arrange(date) %>%
@@ -79,9 +87,11 @@ fmxdat::theme_fmx(title.size = ggpts(30),
 p1
 ```
 
+![](Prac_1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 # Cumulative Returns since 2010
-```{r, warning=FALSE}
+
+``` r
 dta3 <- dta221%>%filter(date>lubridate::ymd(20100101))
 
 p<-
@@ -102,9 +112,11 @@ fmxdat::theme_fmx(title.size = ggpts(30),
 p
 ```
 
-# Attempting to correct for differences in cumulative returns
-```{r, warning=FALSE}
+![](Prac_1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
+# Attempting to correct for differences in cumulative returns
+
+``` r
 # Calculating Simple Returns
 
 dta2 <- dta %>% arrange(date) %>%
@@ -153,4 +165,7 @@ fmxdat::theme_fmx(title.size = ggpts(30),
 p1
 ```
 
-Even after changing the way the cumulative returns are calculated (see README in root folder), the figure above still does not have the same features as the one we were tasked with replicating.
+![](Prac_1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- --> Even after
+changing the way the cumulative returns are calculated (see README in
+root folder), the figure above still does not have the same features as
+the one we were tasked with replicating.
