@@ -8,7 +8,7 @@ output:
 
 The aim of this folder is show my attempt to replicate two figures illustrating how different management fee structures effectively eat into investors overall cumulative returns. This involved first calculating the returns, starting with simple returns and then onto cumulative returns. Then calculating cumulative returns for different management fee structures, from 100bps to 350 bps. And finally 'pivoting longer' the returns for each different level of fees, in order to specify the colour option in the ggplot aesthetic, and finally plotting the cumulative returns. 
 
-My attempt at this practical exercise, including all code and output used, can be found in the RMD file 'Prac_1'.
+My attempt at this practical exercise, including all code and output used, can be found in the file 'Prac_1.md'.
 
 I was, unfortunately, unable to replicate the figures exactly, the impact of higher management fees seems to be lower in the figures I plotted. Upon reflection, I realize that this may be due to the way I set up the 'Tyranny' column. Rather than subtracting the bps (for management fees), I should have calculated it as the percentage change in cumulative returns, after subtracting the management fees. ie the management fees should have been subtracted from the original return calculation, rather than the cumulative return calculation, and that is why the effect of greater management fees appears to be lower in the figures I was able to plot.
 
